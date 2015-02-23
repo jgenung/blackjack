@@ -1,16 +1,22 @@
 .card {
-  float: left;
-  border: solid 1px black;
-  width: 100px;
-  border-radius: 5px;
-  height: 140px;
-  margin-right: 20px;
-}
-
-.covered {
-  background-color: black;
+    float: left;
+    border: solid 1px black;
+    width: 119px;
+    border-radius: 5px;
+    height: 171px;
+    margin-right: 20px;
+    background-position: center;
+    background-size: contain;
+    border-bottom: solid;
+    border-right: solid;
+    background-repeat: no-repeat;
 }
 
 .hand {
-  overflow: auto;
+    overflow: auto;
+    width: 100%;
+}
+
+.covered {
+    background-image: url('../img/card-back.png');
 }

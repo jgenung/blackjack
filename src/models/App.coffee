@@ -5,17 +5,39 @@ class window.App extends Backbone.Model
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
-    currentPlayerHand = @get 'playerHand'
-    currentPlayerHand.on 'endOfTurn', @dealerTurn, this
+    @get('playerHand').on 'endOfTurn', @dealerTurn, this
+    @get('playerHand').on 'endOfGame', @decideWinner, this
+    # set winner in anonymous function before call to decideWinner
     return
     
-    
   dealerTurn: ->
-    currentDealerHand = @get 'dealerHand'
-    currentDealerHand.at(0).flip()
-    console.log currentDealerHand.optimalScore()
-    while currentDealerHand.optimalScore() < 17
-      currentDealerHand.hit() 
-    return  
+    @get('dealerHand').at(0).flip()
+    while @get('dealerHand').optimalScore() < 17
+      @get('dealerHand').hit() 
+    @decideWinner()
+    return
+
+  decideWinner: ->
+    @trigger('disable')
+    if @get('playerHand').optimalScore()>21
+      @trigger 'winnerDecided','Player is bust!'
+    else if @get('playerHand').optimalScore()==21
+      @trigger 'winnerDecided','BlackJack!'
+    else if @get('dealerHand').optimalScore()>@get('playerHand').optimalScore()&&@get('dealerHand').optimalScore()<=21
+      @trigger 'winnerDecided','Dealer wins!'
+    else if @get('dealerHand').optimalScore()==@get('playerHand').optimalScore()
+      @trigger 'winnerDecided','Tie game!'
+    else
+      @trigger 'winnerDecided','Player wins!'
+
+  newGame: ->
+    @set 'deck', deck = new Deck()
+    @set 'playerHand', deck.dealPlayer()
+    @set 'dealerHand', deck.dealDealer()
+    @get('playerHand').on 'endOfTurn', @dealerTurn, this
+    @get('playerHand').on 'endOfGame', @decideWinner, this
+    return
+
+
 
   

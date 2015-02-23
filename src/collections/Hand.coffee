@@ -2,11 +2,11 @@ class window.Hand extends Backbone.Collection
   model: Card
 
   initialize: (array, @deck, @isDealer) ->
+     @trigger('endOfGame', this) if @optimalScore() == 21 || @minScore() > 21
 
   hit: ->
     @add(@deck.pop())
-    @trigger('blackjack', this) if optimalScore() == 21
-    @trigger('bust', this) if minScore() > 21
+    @trigger('endOfGame', this) if @optimalScore() == 21 || @minScore() > 21
     # display either "You win!" or "Bust, you lose!", deactivate hit/stand until new game button is clicked 
 
   hasAce: -> @reduce (memo, card) ->
@@ -24,7 +24,6 @@ class window.Hand extends Backbone.Collection
     [@minScore(), @minScore() + 10 * @hasAce()]
 
   optimalScore: ->
-    
     if !@hasAce()
       @scores()[0]
     else if @scores()[1] <= 21
