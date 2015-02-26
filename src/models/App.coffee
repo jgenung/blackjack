@@ -4,10 +4,14 @@ class window.App extends Backbone.Model
   initialize: ->
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
+    #alert( @get('playerHand').at(0).get 'value')
     @set 'dealerHand', deck.dealDealer()
     @get('playerHand').on 'endOfTurn', @dealerTurn, this
     @get('playerHand').on 'endOfGame', @decideWinner, this
+    # if @get('playerHand').optimalScore() == 21
+      # @trigger 'winnerDecided', 'BlackJack!'
     # set winner in anonymous function before call to decideWinner
+    # console.log @get('playerHand').optimalScore()
     return
     
   dealerTurn: ->

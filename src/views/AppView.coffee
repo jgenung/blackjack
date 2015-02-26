@@ -39,4 +39,6 @@ class window.AppView extends Backbone.View
     @$el.html @template()
     @$('.player-hand-container').html new HandView(collection: @model.get 'playerHand').el
     @$('.dealer-hand-container').html new HandView(collection: @model.get 'dealerHand').el
+    if @model.get('playerHand').optimalScore() > 15
+      @trigger 'winnerDecided', 'BlackJack!'
 
